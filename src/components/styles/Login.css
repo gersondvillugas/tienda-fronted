@@ -1,0 +1,34 @@
+.Login {
+    text-align: center;
+    
+    height: 50px;
+    margin: 0 auto;
+   width: 80%;
+    padding: 20px;
+    color: white;
+  }
+  .input{
+    
+    padding:10px;
+	margin:5px 0;
+ 
+  }
+  input[type="text"]{
+	background:url(usuario.png);
+	background-repeat:no-repeat;
+	background-position:right;
+	background-size:contain;
+    }
+    input[type="email"]{
+        background:url(email.png);
+        background-repeat:no-repeat;
+        background-position:right;
+        background-size:contain;
+        }
+input[type="password"]{
+        background:url(password.png);
+        background-repeat:no-repeat;
+        background-position:right;
+        background-size:contain;
+        }
+        
