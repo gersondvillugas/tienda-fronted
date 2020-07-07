@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
+import styled from 'styled-components';
 import '../components/styles/Header.css';
+const Content = styled.p`
+  font-size: 16px;
+  text-align: right;
+`;
 class Header extends Component {
     // static propTypes = {
     //     title :PropTypes.string.isRequired,
@@ -21,7 +26,11 @@ class Header extends Component {
                 </ul>
             </div>
          */}
-          <p>este es el cabecote</p>
+          <div className="Logo">
+               logotipo
+              
+          </div>
+          <Content> @buyer</Content>
         </div>
     
        )

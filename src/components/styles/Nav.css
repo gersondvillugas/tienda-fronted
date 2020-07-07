@@ -1,0 +1,26 @@
+nav{
+	position:relative;
+	margin:auto;
+	width:418px;
+    height:30px;
+    display: flex;
+    justify-content: center;
+    background-color:transparent ;
+    border-color: transparent;
+    border: transparent;
+    
+	}
+		
+.botones{
+	float: right;
+	width:50px;
+	margin:20px 2px;
+	height:30px;
+	background:rgba(100,0,255,1);
+	font-family: 'Kaushan Script', cursive;
+	color:white;
+    
+    line-height:48px;
+
+	}
+	

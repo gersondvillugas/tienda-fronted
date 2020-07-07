@@ -1,0 +1,35 @@
+/* Este cambia el color del label del campo cuando no está seleccionado */
+.input-field label {
+    color: #000; /* Donde dice #000 pones el color que quieres */
+  }
+.input-field input[type=text]{
+     height: 40px ;
+     width: 200px; 
+}
+  /* Este es para cambiar el color del label cuando seleccionas el campo */
+  .input-field input[type=text]:focus + label {
+    color: blue; /* Por ejemplo, acá saco el verde y pongo por azul */
+  }
+  
+  /* Este es para cambiar el color de la línea del campo cuando lo seleccionas */
+  .input-field input[type=text]:focus {
+    border-bottom: 1px solid #000; /* El #000 es el color de la línea */
+    box-shadow: 0 1px 0 0 #000; /* Y acá, de la pequeña sombra que genera */
+  }
+  
+  /* Si usas la propiedad validate, el color de la línea al validar, será este */
+  .input-field input[type=text].valid {
+    border-bottom: 1px solid #000;
+    box-shadow: 0 1px 0 0 #000;
+  }
+  
+  /* Y este será el color en el caso que se tome como inválido */
+  .input-field input[type=text].invalid {
+    border-bottom: 1px solid black;
+    box-shadow: 0 1px 0 0 black;
+  }
+  
+  /* Pôr último, este cambia el color al ícono cuando entras a un campo */
+  .input-field .prefix.active {
+    color: blue; /* También quieres cambiar esto a otro color, o no? */
+  }

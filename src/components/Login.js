@@ -36,7 +36,7 @@ class Login extends Component {
               console.log(data);
               window.M.toast({html: 'Task Saved'});
               this.setState({nombre: '', apellido: '',password:'',email:''});
-              this.fetchTasks();
+           //   this.fetchTasks();
             })
             .catch(err => console.error(err));
       }
