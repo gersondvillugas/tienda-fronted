@@ -34,12 +34,7 @@ class Products extends Component{
             console.log("----")
           });
        
-          fetch('http://localhost:4000/api/tienda/imagen/productos/'+productos.img)
-          .then(res => res.json())
-          .then(data => {
-            this.setState({img: data});
-            //console.log(this.state.productos);
-          });
+       
       }
     
 
@@ -91,7 +86,7 @@ class Products extends Component{
                                  //   id={product.id}
                                      name={product.nombre}
                                     price={product.precioUni}
-                                    img={product.img}
+                                    img={'http://localhost:4000/api/tienda/imagen/productos/'+product.img}
                                 />)
                                  
                             }
