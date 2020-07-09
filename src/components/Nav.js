@@ -21,10 +21,10 @@ class Nav extends Component {
                 
     	<ul>
     
-               <li class="botones">Botón 1</li>
-                <li class="botones">Botón 2</li>
-                 <li class="botones">Botón 3</li>
-                  <li class="botones">Botón 4</li>
+               <li className="botones">Botón 1</li>
+                <li className="botones">Botón 2</li>
+                 <li className="botones">Botón 3</li>
+                  <li className="botones">Botón 4</li>
                 
 
         </ul>

@@ -54,15 +54,15 @@ class Top extends Component {
           <Wrappersearch> 
           <form className="Form">
           
-               <div className="Form">
+               <div  className="Form">
                 <input  type="search" required/>
-                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
-                <i class="material-icons">close</i>
+                <label className="label-icon" ><i className="material-icons">search</i></label>
+                <i className="material-icons">close</i>
                </div>
               </form>
          </Wrappersearch> 
           <div>
-          <span class="material-icons">
+          <span className="material-icons">
               add_shopping_cart
           </span>    
           </div>   

@@ -1,0 +1,25 @@
+{
+    "productos": [
+      {
+        "id": 1,
+        "name": "arroz",
+        "price": 3.5,
+        "img":"https://cdn4.iconfinder.com/data/icons/avatars-xmas-giveaway/128/batman_hero_avatar_comics-256.png"
+      },
+      {
+        "id": 2,
+        "name": "ryan",
+        "price": 2.6
+      },
+      {
+        "id": 3,
+        "name": "joseph",
+        "price": 2.5
+      },
+      {
+        "id": 4,
+        "name": "joseph",
+        "price": 5
+      }
+    ]
+  }
