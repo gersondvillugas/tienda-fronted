@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
-
- 
+import { Link } from 'react-router-dom';
+  
 import '../components/styles/Products.css';
 import Product from '../components/Product/index';
 import {productos} from  './productos.json';
@@ -11,6 +11,7 @@ class Products extends Component{
         this.state = {
             
             productos:[],
+            categorias:[],
             img : null,
              
             };
@@ -28,12 +29,16 @@ class Products extends Component{
             this.setState({productos: data});
          
             console.log(this.state.productos);
-            console.log("----")
-            console.log(this.state.productos[0].img) 
-          //  console.log(this.state.productos[0].img) 
-            console.log("----")
+      
           });
-       
+          fetch('http://localhost:4000/api/tienda/categoria')
+          .then(res => res.json())
+          .then(data => {
+            this.setState({categorias: data});
+         
+            console.log(this.state.categorias);
+      
+          });
        
       }
     
@@ -54,22 +59,38 @@ class Products extends Component{
                             <h3 className="SideMenuTitle">Filters</h3>
                             <div className="Filter">
                                 <p className="FilterTitle">Categories</p>
-                                <ul>
-                                    {/* {
-                                        this.props.products.categories.length > 0 ? 
-                                        this.categoryTree(this.props.products.categories) : null
-                                    } */}
+                               {/* { this.state.categorias.map((categoria )=> 
+
+
+                                 <ul>
+                                     {
+                                      // console.log(product.categoria.descripcion ) 
+                                         categoria.descripcion 
+                                        // this.props.products.categories.length > 0 ? 
+                                        // this.categoryTree(this.props.products.categories) : null
+                                    } 
+                                </ul>
+                                )
+                                 
+                              } */}
+                                    <ul>
+                                     {
+                                      // console.log(product.categoria.descripcion ) 
+                                        console.log(this.state.categorias.length)
+                                        // this.props.products.categories.length > 0 ? 
+                                        // this.categoryTree(this.props.products.categories) : null
+                                    } 
                                 </ul>
                             </div>
                             
                            <div className="Filter">
                                <p className="FilterTitle">Price</p>
                                <div>
-                                     <button style={{color:'#D7D7D7'}}> Low to High</button>
+                                     <button className="FilterButton" > Low to High</button>
                                     {/* <button onClick={() => this.applyFilter({price:1} )} className="FilterButton">Low to High</button> */}
                                </div>
                                <div>
-                               <button style={{color:'#D7D7D7'}}> High to Low</button>
+                               <button className="FilterButton"> High to Low</button>
                                     {/* <button onClick={() => this.applyFilter({price: -1})} className="FilterButton">High to Low</button> */}
                                </div>
                                
@@ -83,7 +104,7 @@ class Products extends Component{
                             {
                                 this.state.productos.map(product => <Product
                                     key={product._id}
-                                 //   id={product.id}
+                                    id={product._id}
                                      name={product.nombre}
                                     price={product.precioUni}
                                     img={'http://localhost:4000/api/tienda/imagen/productos/'+product.img}

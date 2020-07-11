@@ -5,18 +5,28 @@ import Header from '../src/components/Header'
 import Login from './components/Login';
 import Top from './components/Top';
 import Products from './components/Product'
+import Productdetail from './components/Productdetails'
+import {BrowserRouter as Router,Route} from 'react-router-dom'
+
 function App() {
+
+
   return (
-    <div className="App">
-      <Header />
-      <Top/>
-      <div>
-         <h1 style={{color:'#D7D7D7'}}>  Products</h1>
-      </div>
-       <Products/>
-     {/* <Login/> */}
-     
-    </div>
+ 
+ 
+  <Router>
+         <Header />
+         <Top/>
+  
+       <div className="container p-4">
+        {/* <Route exact  path="/" component={NoteList}/>
+        <Route exact path="/edit/:id" component={CreateNote}/> */}
+        <Route exact path="/products" component={Products}/>
+        <Route exact path="/products/:id" component={Productdetail}/>
+       </div>
+
+    </Router> 
+    
   );
 }
 

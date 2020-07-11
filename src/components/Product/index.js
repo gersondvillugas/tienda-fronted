@@ -1,12 +1,12 @@
 import React from 'react';
-//import { Link, withRouter } from 'react-router-dom';
+import { Link} from 'react-router-dom';
 
 const Product = props => {
 
    // const url = props.match.url === '/' ? '/products/all' : props.match.url;
 
     return (
-      //  <Link to={`${url}/${props.slug}`}>
+      <Link to={`/products/${props.id}`}>
             <div className="Product">
                 <div className="ProductImage">
                     <img alt="" src={props.img} />
@@ -16,7 +16,7 @@ const Product = props => {
                     <p>${props.price}</p>
                 </div>
             </div>
-     //   </Link>
+       </Link>
     );
 }
 
