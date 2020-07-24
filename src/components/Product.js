@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
   
 import '../components/styles/Products.css';
 import Product from '../components/Product/index';
-import {productos} from  './productos.json';
+//import {productos} from  './productos.json';
 class Products extends Component{
     constructor() {
         super();
@@ -19,10 +19,22 @@ class Products extends Component{
   //     this.addUsuario = this.addUsuario.bind(this);
       }
       componentDidMount() {
-        this.fetchTasks();
+        this.getProductos();
+        this.getCategorias();
       }
+      applyFilter = (data,filter) => {
     
-      fetchTasks() {
+    console.log("ordeno?")
+    if(filter==="asc"){
+    console.log(data.sort((a, b) => parseFloat(a.precioUni) -parseFloat(b.precioUni)));
+    }
+    if(filter==="des"){
+        console.log(data.sort((a, b) => parseFloat(b.precioUni) -parseFloat(a.precioUni)));
+
+    }
+    this.setState({productos:data});
+    }
+      getProductos() {
         fetch('http://localhost:4000/api/tienda/producto')
           .then(res => res.json())
           .then(data => {
@@ -31,18 +43,33 @@ class Products extends Component{
             console.log(this.state.productos);
       
           });
-          fetch('http://localhost:4000/api/tienda/categoria')
+     }
+     getProductos2(idcategoria) {
+         console.log('http://localhost:4000/api/tienda/producto/por/'+idcategoria)
+        fetch('http://localhost:4000/api/tienda/producto/por/'+idcategoria)
           .then(res => res.json())
           .then(data => {
-            this.setState({categorias: data});
+            this.setState({productos: data});
          
-            console.log(this.state.categorias);
+            console.log(this.state.productos);
       
           });
+     }
+     getCategorias(){
+        fetch('http://localhost:4000/api/tienda/categoria')
+        .then(res => res.json())
+        .then(data => {
+          this.setState({categorias: data});
        
-      }
+          console.log(this.state.categorias);
     
-
+        });
+     }
+     Filtrocate=(data)=>{
+            console.log(data);
+            this.getProductos2(data);
+     }
+     
     render() {
 
 
@@ -59,39 +86,41 @@ class Products extends Component{
                             <h3 className="SideMenuTitle">Filters</h3>
                             <div className="Filter">
                                 <p className="FilterTitle">Categories</p>
-                               {/* { this.state.categorias.map((categoria )=> 
+                               { this.state.categorias.map((categoria )=> 
 
 
-                                 <ul>
+                                 <ul   onClick={() => this.Filtrocate(categoria._id)}>
+                                   <a href="/products">
                                      {
                                       // console.log(product.categoria.descripcion ) 
-                                         categoria.descripcion 
+                                               categoria.descripcion 
                                         // this.props.products.categories.length > 0 ? 
                                         // this.categoryTree(this.props.products.categories) : null
-                                    } 
+                                    }
+                                     </a> 
                                 </ul>
                                 )
                                  
-                              } */}
-                                    <ul>
+                              }
+                                    {/* <ul>
                                      {
                                       // console.log(product.categoria.descripcion ) 
                                         console.log(this.state.categorias.length)
                                         // this.props.products.categories.length > 0 ? 
                                         // this.categoryTree(this.props.products.categories) : null
                                     } 
-                                </ul>
+                                </ul> */}
                             </div>
                             
                            <div className="Filter">
                                <p className="FilterTitle">Price</p>
                                <div>
-                                     <button className="FilterButton" > Low to High</button>
-                                    {/* <button onClick={() => this.applyFilter({price:1} )} className="FilterButton">Low to High</button> */}
+                                    
+                                    <button onClick={() => this.applyFilter(this.state.productos,"asc")} className="FilterButton">Low to High</button>
                                </div>
                                <div>
-                               <button className="FilterButton"> High to Low</button>
-                                    {/* <button onClick={() => this.applyFilter({price: -1})} className="FilterButton">High to Low</button> */}
+                      
+                                    <button onClick={() => this.applyFilter(this.state.productos,"des")} className="FilterButton">High to Low</button>
                                </div>
                                
                            </div>
