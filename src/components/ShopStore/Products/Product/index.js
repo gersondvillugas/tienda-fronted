@@ -6,7 +6,7 @@ const Product = props => {
    // const url = props.match.url === '/' ? '/products/all' : props.match.url;
 
     return (
-      <Link to={`/products/${props.id}`}>
+      <Link to={`/products/detail/${props.id}`}>
             <div className="Product">
                 <div className="ProductImage">
                     <img alt="" src={props.img} />

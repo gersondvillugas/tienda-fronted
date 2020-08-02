@@ -3,7 +3,7 @@ import React, { Component, useState, useEffect ,useContext} from "react";
 // import Header from '../../components/Header/Header';
 
 import "./style.css";
-import { CartProvider } from '../CartContex';
+
 
 //import { base_url } from '../../constants';
 
