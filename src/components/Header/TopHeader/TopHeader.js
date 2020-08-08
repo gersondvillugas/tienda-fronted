@@ -36,8 +36,8 @@ class TopHeader extends Component{
                     <ul className="TopMenu">
                         <li className="MenuItem">
                             <i className="far fa-user-circle"></i>
-                          {/* //  <Link to="/account">{this.props.auth.isAuthenticated ? this.props.auth.user.firstName: 'My Account'}</Link>
-                            {guestAccount} */}
+                          {/* //  <Link to="/account">{this.props.auth.isAuthenticated ? this.props.auth.user.firstName: 'My Account'}</Link> */}
+                            {guestAccount}
                         </li>
                     </ul>
                 </div>

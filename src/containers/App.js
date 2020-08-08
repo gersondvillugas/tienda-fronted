@@ -15,6 +15,8 @@ import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import ProductDetails from './Productdetails';
 import Home from './Home';
 import Cart from './Cart/index';
+import Signup from './Signup/index'
+import Login from './Login/index'
 // import cartReducers from '../store/reducers/cartReducers';
 // import PlaceOrder from './PlaceOrder';
 // import ThankYou from './ThankYou';
@@ -29,9 +31,9 @@ function App() {
         <div className="App">
             <Switch>
               
-              {/* <Route path="/login" component={Login} />
+              <Route path="/login" component={Login} />
               <Route path="/signup" component={Signup} />
-              <Route path="/forget-password" component={ForgetPassword} />
+              {/* <Route path="/forget-password" component={ForgetPassword} />
               <Route path="/cpanel" component={ControlPanel} /> */}
              
               <Route path="/products"  component={Shop} />
