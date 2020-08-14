@@ -1,7 +1,7 @@
 import React from 'react';
 import './styles.css';
 
-const CartPrice = props => {
+const CartPrice = props => { 
 
     return (
         <div className="PriceWrapper">

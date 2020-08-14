@@ -11,18 +11,21 @@ class TopHeader extends Component{
     //    this.props.getToken();
     }
 
-
+  logout(){
+      localStorage.clear()
+  }
     render() {
         let guestAccount = <ul className="Dropdown Account">
                                 <li><Link to="/signup"><i className="fas fa-user"></i>&nbsp;&nbsp;<span>Register</span></Link></li>
                                 <li><Link to="/login"><i className="fas fa-user"></i>&nbsp;&nbsp;<span>Login</span></Link></li>
                             </ul>;
-        // if(this.props.auth.isAuthenticated){
-        //     guestAccount = <ul className="Dropdown Account">
-        //                         <li><Link to="/orders"><i className="far fa-clipboard"></i>&nbsp;&nbsp;<span>Orders</span></Link></li>
-        //                         <li><Link to="" onClick={() => this.props.logout()}><i className="fas fa-sign-out-alt"></i>&nbsp;&nbsp;<span>Logout</span></Link></li>
-        //                     </ul>;
-        // }
+        //es diferente
+        if(localStorage.getItem('accesstoken')){
+            guestAccount = <ul className="Dropdown Account">
+                                <li><Link to="/orders"><i className="far fa-clipboard"></i>&nbsp;&nbsp;<span>Orders</span></Link></li>
+                                <li><Link to="" onClick={() => this.logout()}><i className="fas fa-sign-out-alt"></i>&nbsp;&nbsp;<span>Logout</span></Link></li>
+                            </ul>;
+        }
 
         return (
             <div className="TopHeader">

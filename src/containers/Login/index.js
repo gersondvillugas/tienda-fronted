@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import "./style.css";
 import { Link, Redirect } from 'react-router-dom';
 import Error from '../../components/Error';
+import API from '../../Api';
 
 class Signup extends Component {
   constructor() {
@@ -9,6 +10,8 @@ class Signup extends Component {
         this.state = {
           nombre: '',
           edad: '',
+          redirectToReferrer: false,
+
           password: '',
           email:'',
           repassword :'',
@@ -27,10 +30,7 @@ class Signup extends Component {
       addUsuario(e){
         e.preventDefault();
         const {nombre,edad,password,repassword,email}=this.state
-        if(nombre === ''){
-            // this.setError(true, 'Enter First Name'); return;
-            alert('enter first name')
-        }
+     
         if(email === ''){
             // this.setError(true, 'Enter Email');
             // return;
@@ -51,36 +51,35 @@ class Signup extends Component {
             alert('Password dosent match')
 
         }
-        fetch('http://localhost:4000/api/tienda/login', {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          })
-            .then(res => res.json())
-            .then(data => {
-              console.log(data);
-              localStorage.setItem("accesstoken",data.token)
-              window.M.toast({html: 'Task Saved'});
-              this.setState({nombre: '', edad: '',password:'',email:''});
-           //   this.fetchTasks();
+     
+
+            API.post(`login`, { email,password })
+            .then(res => {
+              console.log(res);
+              console.log(res.data);
+              localStorage.setItem("accesstoken",res.data.token)
+              this.setState({
+                redirectToReferrer: true
             })
+            this.setState({nombre: '', edad: '',password:'',email:''});
+
+
+            })
+          
             .catch(err => console.error(err));
+       
+
       }
   render(){
     // const {title,items}=this.props
+    if(this.state.redirectToReferrer){
+      return <Redirect to="/products" />
+  }
     return (
         <div className="Login">
             <form   onSubmit={this.addUsuario}>
-                 <div className="input">
-                     <input type="text" name="nombre" onChange={this.handleChange} placeholder="nombre" value={this.state.nombre}/>
-                 </div>
-                 <div  className="input" >
-                 <input type="text" name="edad"  onChange={this.handleChange} placeholder="edad" value={this.state.apellido}/>
-                 </div>
-                 <div className="input" >
+               
+                <div className="input" >
                  <input type="email" name="email" onChange={this.handleChange}  placeholder="email" value={this.state.email}/>
                  </div>
                 <div  className="input" > 
