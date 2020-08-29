@@ -1,27 +1,37 @@
-import React, { Component } from "react";
-import "./style.css";
-import Products from "./Products/Products";
-import { Route, Switch } from "react-router-dom";
-import Header from "../Header/Header";
+import React, { Component } from 'react';
+import './style.css';
+import Products from './Products/Products';
+import { Route, Switch } from 'react-router-dom';
+import Header from '../Header/Header';
+import * as authAtions from '../../store/actions/authActions';
+import { connect } from "react-redux";
 
-import ProductDetails from "../../containers/Productdetails";
-import Cart from "../../containers/Cart/index";
-class ShopStore extends Component {
-  render() {
-    return (
-      <React.Fragment>
-        <Header />
-        <Switch>
-          <Route path="/" exact component={Products} />
-          <Route exact path="/products" component={Products} />
-          <Route exact path="/products/:categoria" component={Products} />
-          {/* <Route  path="/products/:categoria/:id" component={ProductDetails}/> */}
-          <Route path="/products/detail/:id" component={ProductDetails} />
-          <Route exact path="/cart" component={Cart} />
-        </Switch>
-      </React.Fragment>
-    );
-  }
+
+class ShopStore extends Component{
+
+    state={
+        categoryTitle: 'Products'
+    }
+
+    render() {
+
+        console.log('Parents');
+        console.log(this.props);
+
+        return (
+            <React.Fragment>
+                <Header/>
+                <Switch>
+                    <Route path="/" exact component={Products} />
+                    <Route path="/products" exact component={Products} />
+                    <Route path="/products/:slug" component={Products} />
+                </Switch>
+            </React.Fragment>
+            
+        );
+    }
 }
 
-export default ShopStore;
+
+
+export default connect(null, null)(ShopStore);

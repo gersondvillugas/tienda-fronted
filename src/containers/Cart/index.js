@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import Header from '../../components/Header/Header';
-import './styles.css';
-import CartItem from '../Cart/CardItem';
-
+import './style.css';
+import CartItem from './CardItem';
+import * as cartActions from '../../store/actions/cartActions';
+import * as authActions from '../../store/actions/authActions';
+import { connect } from 'react-redux';
 import CartPrice from '../../components/CartPrice';
 
 class Cart extends Component{
 
     state = {
-        cartItems: [],
+        cartItems: []
     }
 
     decreaseQuantity = (e, productId) => {
@@ -66,28 +68,34 @@ class Cart extends Component{
     }
 
     componentDidMount() {
-      
-       
-       
-                // if(cartItems.cart.length > 0){
+        if(!this.props.auth.isAuthenticated){
+            this.props.getToken()
+            .then(result => {
+                if(result){
+                    const cartItems = this.props.getCartItems(this.props.auth.token, this.props.auth.user.userId);
+                    return cartItems;
+                }
+                return [];
+            })
+            .then(cartItems => {
+                if(cartItems.cart.length > 0){
 
-             this.getCartItem()
+                    console.log(this.props.cart)
 
-             
-    
-}
-    getCartItem() {
-        fetch('http://localhost:4000/api/tienda/carditem')
-          .then(res => res.json())
-          .then(data => {
-            this.setState({cartItems: data});
-         
-            console.log(this.state.cartItems);
-           // console.log(product['cart'][0].producto.nombre)
-          });
-     }
-           
-    
+                    this.setState({
+                        cartItems: this.props.cart.cartItem
+                    })
+                }
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }else{
+            this.setState({
+                cartItems: this.props.cart.cartItem
+            })
+        }
+    }
 
     render (){
 
@@ -106,12 +114,12 @@ class Cart extends Component{
                                 {
                                     this.state.cartItems.map(product => 
                                         <CartItem
-                                            key={product._id}
-                                            productId={product._id}
-                                            name={product['cart'][0].nombre}
-                                            image={product['cart'][0].img}
-                                            price={product['cart'][0].price}
-                                            quantity={product['cart'][0].quantity}
+                                            key={product.product}
+                                            productId={product.product}
+                                            name={product.name}
+                                            image={"http://localhost:4000/api/tienda/imagen/productos/"+product.image}
+                                            price={product.price}
+                                            quantity={product.quantity}
                                             total={product.total}
                                             //name="quantity" 
                                             changeQuantity={this.changeQuantity}
@@ -137,7 +145,19 @@ class Cart extends Component{
     }
 }
 
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+        cart: state.cart
+    }
+}
 
+const mapDispatchToProps = dispatch => {
+    return {
+        getCartItems: (token, userId) => dispatch(cartActions.getCartItems(token, userId)),
+        updateCart: (token, userId, product) => dispatch(cartActions.updateCart(token, userId, product)),
+        getToken: () => dispatch(authActions.getToken())
+    }
+}
 
-
-export default Cart;
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

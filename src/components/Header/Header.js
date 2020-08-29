@@ -1,53 +1,63 @@
-import React, { Component } from "react";
-import "./style.css";
-import TopHeader from "./TopHeader/TopHeader";
-import MainHeader from "./MainHeader/MainHeader";
-import BottomHeader from "./BottomHeader/BottomHeader";
-//import * as authActions from '../../store/actions/authActions';
-//import * as cartActions from '../../store/actions/cartActions';
-//import { connect } from 'react-redux';
+import React, { Component } from 'react';
+import './style.css';
+import TopHeader from './TopHeader/TopHeader';
+import MainHeader from './MainHeader/MainHeader';
+import BottomHeader from './BottomHeader/BottomHeader';
+import * as authActions from '../../store/actions/authActions';
+import * as cartActions from '../../store/actions/cartActions';
+import { connect } from 'react-redux';
 
 class Header extends Component {
-  constructor() {
-    super();
-    this.state = {
-      cartItems: [],
-    };
-  }
-  componentDidMount() {
-    this.getCartItem()
-  } 
 
-  getCartItem() {
-    fetch("http://localhost:4000/api/tienda/carditem")
-      .then((res) => res.json())
-      .then((data) => {
-        this.setState({ cartItems: data });
+    componentDidMount() {
+        if(!this.props.auth.isAuthenticated){
+            this.props.getToken()
+            .then(result => {
 
-        console.log(this.state.cartItems.length);
-        // console.log(product['cart'][0].producto.nombre)
-      });
-  }
+                if(result){
+                    this.props.getCartItems(this.props.auth.token, this.props.auth.user.userId)
+                }
 
-  logout = () => {
-    this.props.logout();
-  };
+            })
+            .catch(error => {
+                console.log(error);
+            })
+        }
+    }
 
-  render() {
-    // const {isAuthenticated} = this.props.auth;
-    //const { cart } = this.props;
-    const cartCount = this.state.cartItems.length;
-    //   const cartCount = isAuthenticated ? cart.cartCount : '';
+    logout = () => {
+        this.props.logout();
+    }
 
-    return (
-      <div className="Header">
-        <TopHeader />
-        {/* logout={this.logout} */}
-        <MainHeader cartCount={cartCount} />
-        <BottomHeader />
-      </div>
-    );
-  }
+    render() {
+        const {isAuthenticated} = this.props.auth;
+        const {cart} = this.props;
+        const cartCount = isAuthenticated ? cart.cartCount : '';
+
+        return (
+            <header className="Header">
+                <TopHeader logout={this.logout} />
+                <MainHeader cartCount={cartCount} />
+                <BottomHeader />
+            </header>
+        );
+    }
+    
 }
 
-export default Header;
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+        cart: state.cart
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        getToken: () => dispatch(authActions.getToken()),
+        getCartItems: (token, userId) => dispatch(cartActions.getCartItems(token, userId)),
+        logout: () => dispatch(authActions.logout())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);

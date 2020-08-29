@@ -1,10 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-//import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import './style.css';
 import Logo from '../../Logo';
-//import * as authActions from '../../../store/actions/authActions';
-import AccessAlarmIcon from '@material-ui/icons/AccessAlarm';
+import * as authActions from '../../../store/actions/authActions';
 
 const MainHeader = props => {
 
@@ -18,10 +17,10 @@ const MainHeader = props => {
                     <select>
                         <option>All Categories</option>
                     </select>
-                    <input type="search" />
-                    <span class="material-icons" >
-                        search
-                    </span>
+                    <input type="text" />
+                    <button>
+                        <i className="fas fa-search"></i>
+                    </button>
                 </div>
             </div>
             <div>
@@ -32,5 +31,16 @@ const MainHeader = props => {
     );
 }
 
+const mapStateToProps = state => {
+    return {
+        auth: state.auth,
+        cart: state.cart
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        getToken: () => dispatch(authActions.getToken())
+    }
+}
 
-export default MainHeader;
+export default connect(mapStateToProps, mapDispatchToProps)(MainHeader);

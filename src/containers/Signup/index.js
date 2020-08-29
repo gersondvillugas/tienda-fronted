@@ -1,114 +1,216 @@
 import React, { Component } from 'react';
-import "./style.css";
+import './style.css';
+import Logo from '../../components/Logo';
+import MobileTypeInput from '../../components/UI/MobileTypeInput';
+import SubmitGradientButton from '../../components/UI/SubmitGradientButton';
+import * as authActions from '../../store/actions/authActions';
+
 import { Link, Redirect } from 'react-router-dom';
+import  { connect } from 'react-redux';
 import Error from '../../components/Error';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 class Signup extends Component {
-  constructor() {
-        super();
-        this.state = {
-          nombre: '',
-          edad: '',
-          password: '',
-          email:'',
-          repassword :'',
-          usuarios: []
-        };
-        this.handleChange = this.handleChange.bind(this);
-       this.addUsuario = this.addUsuario.bind(this);
-      }
-      handleChange(e){
-        e.preventDefault();       
-         const { name, value } = e.target;
+
+    state = {
+        redirectToreferrer: false,
+        signupForm: {
+            firstName: '',
+            lastName: '',
+            email: '',
+            password: '',
+            repassword: '',
+            isError: false,
+            errorMessage: ''
+        }
+    }
+
+    textHandler = (e) => {
+        const signupForm = this.state.signupForm;
+        const updateSignupForm = {
+            ...signupForm,
+            [e.target.name] : e.target.value
+        }
         this.setState({
-          [name]: value
+            signupForm: updateSignupForm
+        })
+    }
+
+    setError = (error, message) => {
+        const { signupForm } = this.state;
+        const updatedSignupForm = {
+            ...signupForm,
+            isError: error,
+            errorMessage: message
+        }
+        this.setState({
+            signupForm: updatedSignupForm
         });
-      }
-      addUsuario(e){
-  
+    }
+
+    signupHandler = (e) => {
         e.preventDefault();
-        const {nombre,edad,password,repassword,email}=this.state
-        if(nombre === ''){
-            // this.setError(true, 'Enter First Name'); return;
-            alert('enter first name')
+        const { signupForm } = this.state;
+        if(signupForm.firstName === ''){
+            this.setError(true, 'Enter First Name'); return;
         }
-        if(email === ''){
-            // this.setError(true, 'Enter Email');
-            // return;
-            alert('Enter email')
+        if(signupForm.lastName === ''){
+            this.setError(true, 'Enter Last Name');
+            return;
         }
-        if(password === ''){
-           alert('Enter password')
-        }
-        if(repassword === ''){
-            // this.setError(true, 'Enter Repassword');
-            // return;
-            alert('Enter Repassword')
 
+        const emailPattern = new RegExp(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/);
+        if(!emailPattern.test(signupForm.email)){
+            this.setError(true, 'Invalid Email Address'); return;
         }
-        if(password !== repassword){
-            // this.setError(true, 'Password dosent match');
-            // return;
-            alert('Password dosent match')
 
+        if(signupForm.email === ''){
+            this.setError(true, 'Enter Email');
+            return;
         }
-        fetch('http://localhost:4000/api/tienda/usuario', {
-            method: 'POST',
-            body: JSON.stringify(this.state),
-            headers: {
-              'Accept': 'application/json',
-              'Content-Type': 'application/json'
-            }
-          })
-            .then(res => res.json())
-            .then(data => {
-              console.log(data);
-              //aqui toast
-              toast("Wow so easy !");
+        if(signupForm.password === ''){
+            this.setError(true, 'Enter Password');
+            return;
+        }
+        if(signupForm.repassword === ''){
+            this.setError(true, 'Enter Repassword');
+            return;
+        }
+        if(signupForm.password !== signupForm.repassword){
+            this.setError(true, 'Password dosent match');
+            return;
+        }
 
-              this.setState({nombre: '', edad: '',password:'',email:''});
-           //   this.fetchTasks();
+        const user = {
+            firstName: signupForm.firstName,
+            lastName: signupForm.lastName,
+            email: signupForm.email,
+            password: signupForm.password
+        }
+
+        this.props.signup(user)
+        .then(jsonResponse => {
+            console.log(jsonResponse);
+            this.props.history.push({
+                pathname: '/login',
+               search: '?signup=success',
+               state: jsonResponse.message 
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+    componentDidMount() {
+        if(!this.props.auth.isAuthenticated){
+            this.props.getToken()
+            .then(result => {
+                // result will be either true or false
+                if(result){
+                    this.setState({
+                        redirectToreferrer: true
+                    });
+                }
+                
             })
-            .catch(err => console.error(err));
-      }
-  render(){
-    // const {title,items}=this.props
-    return (
-        <div className="Login">
-            <form   onSubmit={this.addUsuario}>
-                 <div className="input">
-                     <input type="text" name="nombre" onChange={this.handleChange} placeholder="nombre" value={this.state.nombre}/>
-                 </div>
-                 <div  className="input" >
-                 <input type="text" name="edad"  onChange={this.handleChange} placeholder="edad" value={this.state.apellido}/>
-                 </div>
-                 <div className="input" >
-                 <input type="email" name="email" onChange={this.handleChange}  placeholder="email" value={this.state.email}/>
-                 </div>
-                <div  className="input" > 
-                <input type="password" name="password" onChange={this.handleChange} placeholder="password" value={this.state.password}/>
+            .catch(er => {
+                console.log(er);
+            });
+        }
+    }
 
+    render() {
+
+       const { signupForm, redirectToreferrer }  = this.state;
+
+       if(redirectToreferrer){
+           return <Redirect to="/" />
+       }
+
+        return (
+            <div className="LoginContainer">
+                <div className="WelcomeText">
+                    <h3>Signup</h3>
                 </div>
-                <div  className="input" > 
-                <input type="password" name="repassword" onChange={this.handleChange} placeholder="Re-enter password" value={this.state.repassword}/>
+                <Logo style={{margin: '0 auto'}} />
+                <div className="LoginWrapper">
+                    <form onSubmit={this.signupHandler} autoComplete="off">
 
+                        <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                            <div style={{width: '49%'}}>
+                                <MobileTypeInput 
+                                    type="text"
+                                    placeholder="First Name"
+                                    value={signupForm.firstName}
+                                    textHandler={this.textHandler}
+                                    name="firstName"
+                                />
+                            </div>
+                            <div style={{width: '49%'}}>
+                                <MobileTypeInput 
+                                    type="text"
+                                    placeholder="Last Name"
+                                    value={signupForm.lastName}
+                                    textHandler={this.textHandler}
+                                    name="lastName"
+                                />
+                            </div>
+                        </div>
+                        
+                        
+                        <MobileTypeInput 
+                            type="text"
+                            placeholder="Email"
+                            value={signupForm.email}
+                            textHandler={this.textHandler}
+                            name="email"
+                        />
+                        <MobileTypeInput 
+                            type="password"
+                            placeholder="Password"
+                            value={signupForm.password}
+                            textHandler={this.textHandler}
+                            name="password"
+                        />
+                        <MobileTypeInput 
+                            type="password"
+                            placeholder="Re-enter Password"
+                            value={signupForm.repassword}
+                            textHandler={this.textHandler}
+                            name="repassword"
+                        />
+                        
+                        <Error>
+                            {this.state.signupForm.errorMessage}
+                        </Error>
+
+                        <SubmitGradientButton 
+                            label="Signup"
+                            style={{marginTop: '30px'}}
+                        />
+                    </form>
                 </div>
-
-              <button type="submit" className="btn light-blue darken-4" >
-                 Signup 
-               </button>
-               <ToastContainer />
-
-            </form>
-
-            <div style={{display: 'flex', justifyContent: 'space-between'}}>
+                <div style={{display: 'flex', justifyContent: 'space-between'}}>
                     <Link to="/login">Login</Link>
                     <Link to="/forget-password">Forgot Password ?</Link>
                 </div>
-        </div>
-    )
+                
+                
+            </div>
+        );
     }
 }
-export default  Signup 
+
+const mapDispatchToProps = dispatch => {
+    return {
+        signup: (user) => dispatch(authActions.signup(user)),
+        getToken: () => dispatch(authActions.getToken())
+    }
+}
+const mapStateToProps = state => {
+    return {
+        auth: state.auth
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Signup);
